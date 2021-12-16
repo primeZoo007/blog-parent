@@ -2,6 +2,7 @@ package com.zyg.blog.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.zyg.blog.dao.dos.Achives;
 import com.zyg.blog.dao.mapper.ArticleMapper;
 import com.zyg.blog.dao.pojo.Article;
 import com.zyg.blog.service.ArticleService;
@@ -26,6 +27,35 @@ public class ArticleServiceImpl implements ArticleService  {
     private TagService tagService;
     @Autowired
     private SysUserService sysUserService;
+    @Override
+    public Result hotArticle(int limit){
+        LambdaQueryWrapper<Article> queryWrapper= new LambdaQueryWrapper<>();
+        queryWrapper.orderByDesc(Article::getViewCounts);
+        queryWrapper.select(Article::getId,Article::getTitle);
+        queryWrapper.last("limit "+limit);
+        // select id,title from Article order by view_count desc limit 5
+        List<Article> articles = articleMapper.selectList(queryWrapper);
+        return Result.success(copyList(articles,false,false));
+
+    }
+
+    @Override
+    public Result newArticle(int limit) {
+        LambdaQueryWrapper<Article> queryWrapper= new LambdaQueryWrapper<>();
+        queryWrapper.orderByDesc(Article::getCreateDate);
+        queryWrapper.select(Article::getId,Article::getTitle);
+        queryWrapper.last("limit "+limit);
+        // select id,title from Article order by view_count desc limit 5
+        List<Article> articles = articleMapper.selectList(queryWrapper);
+        return Result.success(copyList(articles,false,false));
+    }
+
+    @Override
+    public Result listArchives(int limit) {
+        List<Achives> AchivesList = articleMapper.listArchives();
+        return Result.success(AchivesList);
+    }
+
     @Override
     public Result listArticle(pageParams pageParams) {
         Page<Article> page = new Page<>(pageParams.getPage(),pageParams.getPageSize());

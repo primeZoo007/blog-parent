@@ -21,4 +21,19 @@ public class ArticleController {
     public Result ListArticle(@RequestBody pageParams pageParams){
          return articleService.listArticle(pageParams);
     }
+    @PostMapping("hot")
+    public Result hotArticle(){
+        int limit = 5;
+        return articleService.hotArticle(limit);
+    }
+    @PostMapping("new")
+    public Result newArticle(){
+        int limit = 5;
+        return articleService.newArticle(limit);
+    }
+    @PostMapping("listArchives")
+    public Result listArchives(){
+        int limit = 5;
+        return articleService.listArchives(limit);
+    }
 }
