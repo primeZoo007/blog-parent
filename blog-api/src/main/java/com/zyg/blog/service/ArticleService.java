@@ -11,6 +11,8 @@ public interface ArticleService {
     Result newArticle(int limit);
 
     Result listArchives(int limit);
+
+    Result findArticleById(Long articleId);
     /**
      * 分页列表
      * @param pageParams

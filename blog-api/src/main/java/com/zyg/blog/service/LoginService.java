@@ -10,4 +10,6 @@ public interface LoginService {
     SysUser checkToken(String token);
 
     Result logout(String token);
+
+    Result register(LoginParams loginParams);
 }

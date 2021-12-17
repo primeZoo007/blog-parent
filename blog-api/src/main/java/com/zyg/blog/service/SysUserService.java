@@ -9,4 +9,8 @@ public interface SysUserService {
     SysUser findUser(String account, String password);
 
     Result findUserByToken(String token);
+
+    SysUser findUserByAccount(String account);
+
+    void save(SysUser sysUser);
 }
