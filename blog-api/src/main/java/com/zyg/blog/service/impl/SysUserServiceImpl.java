@@ -9,7 +9,9 @@ import com.zyg.blog.utils.JWTUtils;
 import com.zyg.blog.vo.ErrorCode;
 import com.zyg.blog.vo.LoginUserVo;
 import com.zyg.blog.vo.Result;
+import com.zyg.blog.vo.UserVo;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -68,5 +70,20 @@ public class SysUserServiceImpl implements SysUserService {
         // id 会自动生成
         // 用韵雪花算法
         this.sysUserMapper.insert(sysUser);
+    }
+
+    @Override
+    public UserVo findUserVoById(Long id) {
+        SysUser sysUser = sysUserMapper.selectById(id);
+        if (sysUser == null){
+            sysUser = new SysUser();
+            sysUser.setId(1L);
+            sysUser.setAvatar("/static/img/logo.b3a48c0.png");
+            sysUser.setNickname("码神之路");
+        }
+        UserVo userVo  = new UserVo();
+        BeanUtils.copyProperties(sysUser,userVo);
+        userVo.setId(String.valueOf(sysUser.getId()));
+        return userVo;
     }
 }

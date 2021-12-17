@@ -7,10 +7,7 @@ import com.zyg.blog.dao.mapper.ArticleMapper;
 import com.zyg.blog.dao.mapper.ArticleBodyMapper;
 import com.zyg.blog.dao.pojo.Article;
 import com.zyg.blog.dao.pojo.ArticleBody;
-import com.zyg.blog.service.ArticleService;
-import com.zyg.blog.service.CategoryService;
-import com.zyg.blog.service.SysUserService;
-import com.zyg.blog.service.TagService;
+import com.zyg.blog.service.*;
 import com.zyg.blog.vo.ArticleBodyVo;
 import com.zyg.blog.vo.ArticleVo;
 import com.zyg.blog.vo.CategoryVo;
@@ -36,6 +33,8 @@ public class ArticleServiceImpl implements ArticleService  {
     private SysUserService sysUserService;
     @Autowired
     private CategoryService categoryService;
+    @Autowired
+    private ThreadService threadService;
     @Override
     public Result hotArticle(int limit){
         LambdaQueryWrapper<Article> queryWrapper= new LambdaQueryWrapper<>();
@@ -71,7 +70,7 @@ public class ArticleServiceImpl implements ArticleService  {
         ArticleVo articleVo = copy(article,true,true,true,true);
         // 更新 增加了此次接口的耗时，如果更新出问题，不能影响查看文章的操作
         // 线程池 可以把更新操作扔到线程池中去执行，和主线程就不相关了
-
+        threadService.updateArticleViewCount(articleMapper,article);
         return Result.success(articleVo);
     }
 
